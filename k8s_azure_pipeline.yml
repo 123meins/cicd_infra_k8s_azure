@@ -1,5 +1,5 @@
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -24,7 +24,7 @@ steps:
     backendAzureRmStorageAccountName: 'storagek8smarkus'
     backendAzureRmContainerName: 'storagek8smarkuscontainer'
     backendAzureRmKey: 'k8s.tfstate'
-    
+
 - task: TerraformTaskV3@3
   inputs:
     provider: 'azurerm'
