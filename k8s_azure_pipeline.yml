@@ -16,13 +16,20 @@ steps:
   inputs:
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
-    # commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(public_key.secureFilePath)'
     backendType: 'azurerm'
-    backendServiceArm: 'azure-resource-manager-service-connection'
+    backendServiceArm: 'azure-resource-manager-service'
     ensureBackend: true
     backendAzureRmResourceGroupName: 'terraform.backend.rg'
     backendAzureRmResourceGroupLocation: 'westeurope'
-    backendAzureRmStorageAccountName: 'storage.k8s'
-    backendAzureRmContainerName: 'sotrage.k8s.container'
+    backendAzureRmStorageAccountName: 'storagek8smarkus'
+    backendAzureRmContainerName: 'storagek8smarkuscontainer'
     backendAzureRmKey: 'k8s.tfstate'
+    
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(public_key.secureFilePath)'
+    environmentServiceNameAzureRM: 'azure-resource-manager-service'
 
