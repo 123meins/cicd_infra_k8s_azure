@@ -1,7 +1,10 @@
-# cicd_infra_k8s_azure
+## cicd_infra_k8s_azure
 cicd projekt with terraform, azure devops and k8s
 
 ## Getting started
+
+#
+pipline is deactivated, no infrastructure is running
 
 # install azure cli
 ```
