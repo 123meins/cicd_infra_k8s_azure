@@ -1,0 +1,40 @@
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    backendType: 'azurerm'
+    backendServiceArm: 'azure-resource-manager-service'
+    ensureBackend: true
+    backendAzureRmResourceGroupName: 'terraform.backend.rg'
+    backendAzureRmResourceGroupLocation: 'westeurope'
+    backendAzureRmStorageAccountName: 'storagek8smarkus'
+    backendAzureRmContainerName: 'storagek8smarkuscontainer'
+    backendAzureRmKey: 'k8s.tfstate'
+    allowTelemetryCollection: true
+
+- task: AzureCLI@2
+  displayName: "Break lease on terraform state"
+  name: BreakLease
+  inputs:
+    azureSubscription: 'azure-resource-manager-service'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: 'az storage blob lease break --container-name ''storagek8smarkuscontainer'' --blob-name ''k8s.tfstate'' --account-name ''storagek8smarkus'''
+    
+- task: DownloadSecureFile@1
+  name: public_key
+  inputs:
+    secureFile: 'azure_rsa.pub'
+
+- task: TerraformTaskV3@3
+  inputs:
+    provider: 'azurerm'
+    command: 'destroy'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/terraform'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(public_key.secureFilePath)'
+    environmentServiceNameAzureRM: 'azure-resource-manager-service'
