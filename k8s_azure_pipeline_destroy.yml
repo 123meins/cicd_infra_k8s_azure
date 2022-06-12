@@ -17,15 +17,15 @@ steps:
     backendAzureRmKey: 'k8s.tfstate'
     allowTelemetryCollection: true
 
-- task: AzureCLI@2
-  displayName: "Break lease on terraform state"
-  name: BreakLease
-  inputs:
-    azureSubscription: 'azure-resource-manager-service'
-    scriptType: 'pscore'
-    scriptLocation: 'inlineScript'
-    inlineScript: 'az storage blob lease break --container-name ''storagek8smarkuscontainer'' --blob-name ''k8s.tfstate'' --account-name ''storagek8smarkus'''
-    
+#- task: AzureCLI@2
+  #displayName: "Break lease on terraform state"
+  #name: BreakLease
+  #inputs:
+    #azureSubscription: 'azure-resource-manager-service'
+    #scriptType: 'pscore'
+    #scriptLocation: 'inlineScript'
+    #inlineScript: 'az storage blob lease break --container-name ''storagek8smarkuscontainer'' --blob-name ''k8s.tfstate'' --account-name ''storagek8smarkus'''
+
 - task: DownloadSecureFile@1
   name: public_key
   inputs:
